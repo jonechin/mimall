@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "..\\..\\..\\..\\..\\秦军\\Q‘sNote\\第四阶段\\HTML5"
+		},
+		{
+			"path": "..\\..\\..\\..\\testdemo\\project"
+		},
+		{
+			"path": "..\\..\\.."
+		},
+		{
+			"path": "..\\..\\..\\..\\..\\秦军\\Q‘sNote\\第四阶段\\VUEUI\\demo\\scaffolding"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "HTML5"
+	}
+}
