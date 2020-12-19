@@ -4,19 +4,39 @@
   </div>
 </template>
 <script>
-// import axios from 'axios';
-// import jsonp from 'jsonp';
-// export default {
-//   mounted() {
-//     let url='http://127.0.0.1:3000'
-//     jsonp(url)
-//   },
-// }
+export default{
+  name:'app',
+  components:{
+
+  },
+  data() {
+    return {
+      
+    }
+  },
+  mounted() {
+    this.getUser();
+    this.getCartCount();
+  },
+  methods: {
+    getUser(){
+       this.axios.get('/user').then((res)=>{
+         //to-do 保存到vuex里面
+         this.$store.dispatch('saveUserName',res.username);
+       })
+    },
+    getCartCount(){
+       this.axios.get('/carts/products/sum').then((res)=>{
+          this.$store.dispatch('saveCartCount',res);
+       })
+    }
+  },
+  }
 </script>
 
 <style lang="scss">
 @import './assets/scss/reset.scss';
-@import './assets/scss/button.scss';
 @import './assets/scss/config.scss';
+@import './assets/scss/button.scss';
 
 </style>
