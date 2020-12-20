@@ -72,23 +72,23 @@
         <h2>手机</h2>
         <div class="wrapper">
           <div class="banner-left">
-            <a href="/#product/35"><img v-lazy="'/imgs/mix-alpha.jpg'" alt="" /></a>
+            <a href="/#product/35"
+              ><img v-lazy="'/imgs/mix-alpha.jpg'" alt=""
+            /></a>
           </div>
           <div class="list-box">
             <div class="list" v-for="(arr, i) in phoneList" :key="i">
               <div class="item" v-for="(item, j) in arr" :key="j">
-                <span :class="{'new-pro':j%2==0}">新品</span>
+                <span :class="{ 'new-pro': j % 2 == 0 }">新品</span>
                 <div class="item-img">
-                  <img
-                    v-lazy="item.mainImage"
-                    alt=""
-                  />
+                  <img v-lazy="item.mainImage" alt="" />
                 </div>
                 <div class="item-info">
-                  <h3>{{item.name}}</h3>
-                  <p>{{item.subtitle}}</p>
-                  <p class="price" @click="addCart(item.id)">{{item.price}}元</p>
-                  
+                  <h3>{{ item.name }}</h3>
+                  <p>{{ item.subtitle }}</p>
+                  <p class="price" @click="addCart(item.id)">
+                    {{ item.price }}元
+                  </p>
                 </div>
               </div>
             </div>
@@ -97,24 +97,24 @@
       </div>
     </div>
     <service-bar></service-bar>
-    <modal 
-    title="提示"
-     sureText="查看购物车"
+    <modal
+      title="提示"
+      sureText="查看购物车"
       btnType="1"
-       modalType="middle" 
-       v-bind:showModal="showModal"
-       v-on:submit="goToCart"
-       v-on:cancel="showModal=false"
-       >
+      modalType="middle"
+      v-bind:showModal="showModal"
+      v-on:submit="goToCart"
+      v-on:cancel="showModal = false"
+    >
       <template v-slot:body>
-       <p>商品添加成功！</p>
+        <p>商品添加成功！</p>
       </template>
     </modal>
   </div>
 </template>
 <script>
 import ServiceBar from "./../components/ServiceBar";
-import Modal from './../components/Modal';
+import Modal from "./../components/Modal";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import "swiper/dist/css/swiper.css";
 export default {
@@ -297,38 +297,43 @@ export default {
         },
       ],
       phoneList: [],
-      showModal:false
-    }
+      showModal: false,
+    };
   },
   mounted() {
     this.init();
   },
   methods: {
-    init(){
-      this.axios.get('/products',{
-        params:{
-          categoryId:100012,
-          pageSize:14
-        }
-      }).then((res)=>{
-        res.list=res.list.slice(6,14);
-         this.phoneList=[res.list.slice(0,4),res.list.slice(4,8)]
-      })
+    init() {
+      this.axios
+        .get("/products", {
+          params: {
+            categoryId: 100012,
+            pageSize: 14,
+          },
+        })
+        .then((res) => {
+          res.list = res.list.slice(6, 14);
+          this.phoneList = [res.list.slice(0, 4), res.list.slice(4, 8)];
+        });
     },
-    addCart(){
-      this.showModal=true;
-      // this.axios.post('/carts',{
-      //   productId:id,
-      //   selected:true
-      // }).then(()=>{
-
-      // }).catch(()=>{
-      //   this.showModal=true;
-      // })
+    addCart(id) {
+      this.axios
+        .post("/carts", {
+          productId: id,
+          selected: true,
+        })
+        .then((res) => {
+          this.showModal = true;
+          this.$store.dispatch("saveCartCount", res.cartTotalQuantity);
+        })
+        .catch(() => {
+          this.showModal = true;
+        });
     },
-    goToCart(){
-      this.$router.push('/cart');
-    }
+    goToCart() {
+      this.$router.push("/cart");
+    },
   },
 };
 </script>
@@ -462,15 +467,15 @@ export default {
             text-align: center;
             span {
               display: inline-block;
-              width:76px;
+              width: 76px;
               height: 24px;
               font-size: 14px;
               line-height: 24px;
               color: $colorG;
-              &.new-pro{
+              &.new-pro {
                 background-color: #7efc68;
               }
-              &.kill-pro{
+              &.kill-pro {
                 background-color: #e82626;
               }
             }
