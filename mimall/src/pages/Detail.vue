@@ -131,7 +131,7 @@ export default {
         .post("/carts", { productId: this.id, selected: true })
         .then((res = {}) => {
           this.$store.dispatch("saveCartCount", res.cartTotalQuantity);
-          this.$router.push("/carts");
+          this.$router.push("/cart");
         });
     },
   },
