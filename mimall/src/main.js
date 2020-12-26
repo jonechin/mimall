@@ -7,16 +7,21 @@ import VueAxios from 'vue-axios'
 import VueLazyLoad from 'vue-lazyload'
 import VueCookie from 'vue-cookie'
 import {Message} from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
 // const mock = false;
 // if(mock){
 //   require('./mock/api');
 // }
+
+Vue.use(VueAxios, axios)
+Vue.use(VueCookie)
+Vue.prototype.$message=Message;
 Vue.use(VueLazyLoad, {
   loading: '/imgs/loading-svg/loading-bars.svg'
 });
-Vue.use(VueAxios, axios)
-Vue.use(VueCookie)
+
+
 axios.defaults.baseURL = '/api';
 axios.defaults.timeout = 8000;
 
@@ -32,7 +37,7 @@ axios.interceptors.response.use(function (response) {
     } return Promise.reject(res);
   } else {
 
-    alert(res.msg);
+    Message.warning(res.msg);
     return Promise.reject(res);
   }
 })
