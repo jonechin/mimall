@@ -84,13 +84,17 @@
           <div class="item-good">
             <h2>商品</h2>
             <ul>
-              <li>
+              <li v-for="(item, index) in cartList" :key="index">
                 <div class="good-name">
-                  <img src="/imgs/item-box-3-1.png" alt="" />
-                  <span>小米8 6GB 全息幻彩紫 64GB</span>
+                  <img v-lazy="item.productMainImage" alt="" />
+                  <span>{{
+                    item.productName + "" + item.productSubtitle
+                  }}</span>
                 </div>
-                <div class="good-price">1999元x2</div>
-                <div class="good-total">1999元</div>
+                <div class="good-price">
+                  {{ item.productPrice }}元X{{ item.quantity }}
+                </div>
+                <div class="good-total">{{ item.productTotalPrice }}</div>
               </li>
               <li>
                 <div class="good-name">
@@ -114,11 +118,11 @@
           <div class="detail">
             <div class="item">
               <span class="item-name">商品件数：</span>
-              <span class="item-val">1件</span>
+              <span class="item-val">{{ count }}件</span>
             </div>
             <div class="item">
               <span class="item-name">商品总价：</span>
-              <span class="item-val">2599元</span>
+              <span class="item-val">{{ cartTotalPrice }}</span>
             </div>
             <div class="item">
               <span class="item-name">优惠活动：</span>
@@ -142,6 +146,7 @@
         </div>
       </div>
     </div>
+
     <modal
       title="新增确认"
       btnType="1"
@@ -183,6 +188,17 @@
         </div>
       </template>
     </modal>
+    <modal
+      title="删除确认"
+      btnType="1"
+      :showModal="showDelModal"
+      @cancel="showDelModal = false"
+      @sumbit="submitAddress"
+    >
+      <template v-slot:body>
+        <p>你确认要删除此地址吗</p>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
@@ -195,7 +211,10 @@ export default {
       list: [],
       cartList: [],
       cartTotalPrice: 0,
+      count: 0,
       showEditModal: false, //是否显示新增或者编辑弹框
+      checkedItem: {},
+      userAction: "",
     };
   },
   mounted() {
@@ -212,11 +231,35 @@ export default {
         this.list = res.list;
       });
     },
+    delAddress(item) {
+      this.checkedItem = item;
+      this.userAction = 2;
+      this.showDelModal = true;
+    },
+    submitAddress() {
+      let { checkedItem, userAction } = this;
+      let method, url;
+      if (userAction == 0) {
+        (method = "post"), (url = "/shippings");
+      } else if (userAction == 1) {
+        (method = "put"), (url = `/shippings/${checkedItem.id}`);
+      } else {
+        (method = "delete"), (url = `/shippings/${checkedItem.id}`);
+      }
+      this.axios[method](url).then(() => {
+        this.closeModal();
+        this.getAddressList();
+        this.$message.success("操作成功");
+      });
+    },
     getCartList() {
       this.axios.get("/carts").then((res) => {
         let list = res.cartProductVoList;
         this.cartTotalPrice = res.cartTotalPrice;
         this.cartList = list.filter((item) => item.productSelected);
+        this.cartList.map((item) => {
+          this.count += item.quantity;
+        });
       });
     },
     // 打开新增地址弹框
@@ -224,6 +267,8 @@ export default {
       this.showEditModal = true;
     },
     closeModal() {
+      this.checkedItem = {};
+      this.userAction = "";
       this.showEditModal = false;
     },
     // 订单提交
