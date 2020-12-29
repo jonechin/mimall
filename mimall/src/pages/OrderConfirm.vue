@@ -136,7 +136,7 @@
             </div>
             <div class="item-total">
               <span class="item-name">应付总额：</span>
-              <span class="item-val">2599元</span>
+              <span class="item-val">{{ cartTotalPrice }}</span>
             </div>
           </div>
           <div class="btn-group">
