@@ -19,7 +19,8 @@
               <p>应付总额：<span>2599</span>元</p>
               <p>
                 订单详情<em
-                  class="icon-down" :class="{'up':showDetail}"
+                  class="icon-down"
+                  :class="{ up: showDetail }"
                   @click="showDetail = !showDetail"
                 ></em>
               </p>
@@ -73,7 +74,7 @@ export default {
       orderNo: this.$route.query.orderNo,
       addressInfo: "",
       orderDetail: [],
-      showDetail: false, //是否显示订单详情
+      showDetail: true, //是否显示订单详情
       showPay: false, //是否显示微信支付弹框
     };
   },
@@ -88,9 +89,10 @@ export default {
   },
   methods: {
     getOrderDetail() {
-      this.axios.get(`/orders/${this.orderNo}`, orderNo).then((res) => {
+      this.axios.get(`/orders/?orderNo=${this.orderNo}`).then((res) => {
         let item = res.shippingVo;
-        this.addressInfo = `${item.receiverName}${item.receiverMobile}${item.receiverProvince}${item.receiverCity}${item.receiverDistrict}${item.receiverAddress}`;
+        console.log(item);
+        this.addressInfo = `${item.receiverName} ${item.receiverMobile} ${item.receiverProvince} ${item.receiverCity} ${item.receiverDistrict}${item.receiverAddress}`;
         this.orderDetail = res.orderItemVoList;
       });
     },
