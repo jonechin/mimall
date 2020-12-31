@@ -1,10 +1,5 @@
 <template>
   <div class="order-pay">
-    <!-- <order-header title="订单支付">
-      <template v-slot:tip>
-        <span>请谨防钓鱼链接或诈骗电话，了解更多</span>
-      </template>
-    </order-header> -->
     <div class="wrapper">
       <div class="container">
         <div class="order-wrap">
@@ -80,7 +75,7 @@ export default {
   },
   mounted() {
     this.getOrderDetail();
-    console.log(this.orderNo);
+    console.log(this.$route);
   },
 
   components: {
@@ -89,7 +84,7 @@ export default {
   },
   methods: {
     getOrderDetail() {
-      this.axios.get(`/orders/?orderNo=${this.orderNo}`).then((res) => {
+      this.axios.get(`/orders/${this.orderNo}`).then((res) => {
         let item = res.shippingVo;
         console.log(item);
         this.addressInfo = `${item.receiverName} ${item.receiverMobile} ${item.receiverProvince} ${item.receiverCity} ${item.receiverDistrict}${item.receiverAddress}`;
