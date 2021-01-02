@@ -1,5 +1,10 @@
 <template>
   <div class="order-pay">
+     <order-header title="订单支付">
+      <template v-slot:tip>
+        <span>请谨防钓鱼链接或诈骗电话，了解更多></span>
+      </template>
+    </order-header>
     <div class="wrapper">
       <div class="container">
         <div class="order-wrap">
@@ -57,7 +62,7 @@
             ></div>
             <div
               class="pay pay-wechat"
-              :class="{ checked: (payType = 2) }"
+              :class="{ checked: (payType == 2) }"
               @click="paySubmit(2)"
             ></div>
           </div>
@@ -95,7 +100,7 @@ export default {
       orderDetail: [],
       showDetail: true, //是否显示订单详情
       showPay: false, //是否显示微信支付弹框
-      payType: "",
+      payType: '',
       payImg:'',
       showPayModal:false,
       T:'',
